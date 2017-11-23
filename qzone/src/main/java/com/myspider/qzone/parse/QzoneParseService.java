@@ -25,8 +25,8 @@ public class QzoneParseService {
 
     public void parse(String account, MultiPageStore multiPageStore){
 //        //解析目标用户的基本信息
-//        DataAccount dataAccount = parseDataAccount(account, multiPageStore);
-//        dataDao.saveDataAccount(dataAccount);
+        DataAccount dataAccount = parseDataAccount(account, multiPageStore);
+        dataDao.saveDataAccount(dataAccount);
 //        JSONObject taotaoJson = parseTaotao(account, multiPageStore);
 //        dataDao.savaTaotaoJson(taotaoJson);
 

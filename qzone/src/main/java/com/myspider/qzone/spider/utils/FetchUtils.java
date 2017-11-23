@@ -23,10 +23,9 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -142,6 +141,43 @@ public class FetchUtils {
 		}
 		log.info("end post url:" + url + " " + System.currentTimeMillis());
 		return content;
+	}
+
+	/**
+	 * 根据地址下载图片获取图片数据流
+	 * @param strUrl 网络连接地址
+	 * @return
+	 */
+	public static byte[] getImageFromNetByUrl(String strUrl){
+		try {
+			URL url = new URL(strUrl);
+			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setConnectTimeout(5 * 1000);
+			conn.setReadTimeout(5*1000);
+			InputStream inStream = conn.getInputStream();//通过输入流获取图片数据
+			byte[] btImg = readInputStream(inStream);//得到图片的二进制数据
+			return btImg;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	/**
+	 * 从输入流中获取数据
+	 * @param inStream 输入流
+	 * @return
+	 * @throws Exception
+	 */
+	public static byte[] readInputStream(InputStream inStream) throws Exception{
+		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+		byte[] buffer = new byte[1024];
+		int len = 0;
+		while( (len=inStream.read(buffer)) != -1 ){
+			outStream.write(buffer, 0, len);
+		}
+		inStream.close();
+		return outStream.toByteArray();
 	}
 
 	/**
